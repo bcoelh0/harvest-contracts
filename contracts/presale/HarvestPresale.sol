@@ -22,11 +22,12 @@ contract HarvestPresale is Ownable {
   uint public publicRaiseOpenAt;
   uint public raiseCloseAt;
 
-  uint public raiseTarget;
   uint public wlTotalRaised;
   uint public totalRaised;
   ERC20 public token;
-  uint public tokenPrice = 0.00001 ether;
+
+  uint public raiseTarget = 100 ether;
+  uint public tokenPrice = 0.0002 ether;
   address public wlDataAddress;
   uint public maxPerWallet = 2 ether;
   uint public MIN_PER_WALLET = 0.01 ether;
@@ -46,8 +47,7 @@ contract HarvestPresale is Ownable {
     _;
   }
 
-  constructor(uint _target, uint _privateRaiseOpenAt, address _wlDataAddress) {
-    raiseTarget = _target;
+  constructor(uint _privateRaiseOpenAt, address _wlDataAddress) {
     privateRaiseOpenAt = _privateRaiseOpenAt;
     publicRaiseOpenAt = privateRaiseOpenAt + PRIVATE_RAISE_DURATION;
     raiseCloseAt = privateRaiseOpenAt + TOTAL_RAISE_DURATION;
@@ -102,6 +102,7 @@ contract HarvestPresale is Ownable {
   function refund() public {
     require(refundOpen, "Refund is not open");
     require(accounts[msg.sender].balance > 0, "No balance");
+    require(accounts[msg.sender].refundedAt == 0, "Already refunded");
 
     uint amount = accounts[msg.sender].balance;
     accounts[msg.sender].refundedAt = block.timestamp;

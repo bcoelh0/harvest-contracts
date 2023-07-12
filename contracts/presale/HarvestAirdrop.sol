@@ -9,8 +9,8 @@ contract HarvestAirdrop is Ownable {
   ERC20 public token;
   HarvestPresale public presale;
   uint public airdropTreshold = 0.01 ether;
-  uint public totalAirdrop = 1_000_000 ether;
-  uint public totalRaised = 1;
+  uint public totalAirdrop = 50_000 ether;
+  uint public totalRaised = 100 ether;
   // X HRVST per ETH
   uint public airdropAmountPerEth = (totalAirdrop * 1 ether) / totalRaised;
 
@@ -47,6 +47,11 @@ contract HarvestAirdrop is Ownable {
   }
 
   // admin
+
+  function updateTotalRaised(uint _raised) public onlyOwner {
+    totalRaised = _raised;
+    airdropAmountPerEth = (totalAirdrop * 1 ether) / totalRaised;
+  }
 
   function toggleOpen() public onlyOwner {
     isOpen = !isOpen;
