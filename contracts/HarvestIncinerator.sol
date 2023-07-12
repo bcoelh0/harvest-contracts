@@ -25,7 +25,8 @@ contract HarvestIncinerator is Ownable, Pausable {
         hrvstToken.burn(_hrvstAmount);
 
         // pay user in ETH
-        payable(msg.sender).transfer(_hrvstAmount * pricePerHrvst);
+        uint valToPay = (_hrvstAmount * pricePerHrvst) / 1 ether;
+        payable(msg.sender).transfer(valToPay);
     }
 
     // ADMIN FUNCTIONS
@@ -58,5 +59,10 @@ contract HarvestIncinerator is Ownable, Pausable {
     // set token address onlyOwner
     function setTokenAddress(address _tokenAddress) external onlyOwner {
         hrvstToken = HarvestToken(_tokenAddress);
+    }
+
+    event Received(address, uint);
+    receive() external payable {
+        emit Received(msg.sender, msg.value);
     }
 }

@@ -4,8 +4,8 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract HarvestToken is ERC20 {
-    constructor() ERC20("Harvest Token", "HRVST") {
-        _mint(msg.sender, 1_000_000 * 10 ** decimals());
+    constructor() ERC20("BROBRO Token", "BROBRO") {
+        _mint(msg.sender, 10_000_000 * 10 ** decimals());
     }
 
     function burn(uint256 amount) public {

@@ -17,9 +17,9 @@ module.exports = {
     }
   },
   networks: {
-    // arbitrumOne: {
-    //   url: "https://arb1.arbitrum.io/rpc",
-    //   accounts: [process.env.PK]
-    // }
+    arbitrumOne: {
+      url: "https://arb1.arbitrum.io/rpc",
+      accounts: [process.env.PK]
+    }
   },
 };

@@ -50,8 +50,6 @@ contract HarvestFarm is Ownable {
 
     /// Address where the deposit fees are transferred.
     address public feeCollector;
-    address public mrkgFeeCollector;
-    address public devFeeCollector;
     address public poolofficer;
 
     /// Information about each pool.
@@ -104,13 +102,10 @@ contract HarvestFarm is Ownable {
         uint256 _runningTime,
         uint256 _tokenPerSecond,
         address _feeCollector,
-        address _mrkgFeeCollector,
-        address _devFeeCollector,
         address _presale
     ) {
         require(block.timestamp < _poolStartTime, "late");
         require(_feeCollector != address(0), "Address cannot be 0");
-        require(_mrkgFeeCollector != address(0), "Address cannot be 0");
         require(_runningTime >= 1 days, "Running time has to be at least 1 day");
 
         if (_tokenAddress != address(0)) token = IERC20(_tokenAddress);
@@ -122,8 +117,6 @@ contract HarvestFarm is Ownable {
         tokenPerSecond = _tokenPerSecond;
 
         feeCollector = _feeCollector;
-        mrkgFeeCollector = _mrkgFeeCollector;
-        devFeeCollector = _devFeeCollector;
         poolofficer = msg.sender;
         presale = HarvestPresale(_presale);
     }
@@ -308,13 +301,9 @@ contract HarvestFarm is Ownable {
         if (_amount > 0) {
             if(pool.depositFee > 0 && !isExcludedFromFee(_sender)) {
                 uint256 depositFeeAmount = (_amount * pool.depositFee) / 10000;
-                uint halfDepositFeeAmount = depositFeeAmount / 2;
-                uint quarterDepositFeeAmount = halfDepositFeeAmount / 2;
                 user.amount = user.amount + (_amount - depositFeeAmount);
 
-                pool.token.safeTransferFrom(_sender, feeCollector, halfDepositFeeAmount);
-                pool.token.safeTransferFrom(_sender, mrkgFeeCollector, quarterDepositFeeAmount);
-                pool.token.safeTransferFrom(_sender, devFeeCollector, quarterDepositFeeAmount);
+                pool.token.safeTransferFrom(_sender, feeCollector, depositFeeAmount);
                 pool.token.safeTransferFrom(_sender, address(this), _amount - depositFeeAmount);
             } else {
                 user.amount = user.amount + _amount;
@@ -346,12 +335,8 @@ contract HarvestFarm is Ownable {
         if (_amount > 0) {
             if(pool.withdrawFee > 0) {
                 uint256 withdrawFeeAmount = (_amount * pool.withdrawFee) / 10000;
-                uint halfWithdrawFeeAmount = withdrawFeeAmount / 2;
-                uint quarterWithdrawFeeAmount = halfWithdrawFeeAmount / 2;
 
-                pool.token.safeTransfer(feeCollector, halfWithdrawFeeAmount);
-                pool.token.safeTransfer(mrkgFeeCollector, quarterWithdrawFeeAmount);
-                pool.token.safeTransfer(devFeeCollector, quarterWithdrawFeeAmount);
+                pool.token.safeTransfer(feeCollector, withdrawFeeAmount);
                 pool.token.safeTransfer(_sender, _amount - withdrawFeeAmount);
             }
             else {
@@ -398,18 +383,6 @@ contract HarvestFarm is Ownable {
         require(_feeCollector != address(0), "Address cannot be 0");
         feeCollector = _feeCollector;
         emit UpdateFeeCollector(msg.sender, address(_feeCollector));
-    }
-
-    function setMrkgFeeCollector(address _mrkgFeeCollector) external onlyOwner {
-        require(_mrkgFeeCollector != address(0), "Address cannot be 0");
-        mrkgFeeCollector = _mrkgFeeCollector;
-        emit UpdateFeeCollector(msg.sender, address(_mrkgFeeCollector));
-    }
-
-    function setDevFeeCollector(address _devFeeCollector) external onlyOwner {
-        require(_devFeeCollector != address(0), "Address cannot be 0");
-        devFeeCollector = _devFeeCollector;
-        emit UpdateFeeCollector(msg.sender, address(_devFeeCollector));
     }
 
     function clearReward(uint256 _amount, address _receiver) public onlyOwnerOrOfficer{

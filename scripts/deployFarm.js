@@ -5,25 +5,23 @@ async function main() {
 
   console.log("Deploying contracts with the account:", deployer.address);
 
-  const BathtubFarm = await ethers.getContractFactory("BathtubFarm");
+  const HarvestFarm = await ethers.getContractFactory("HarvestFarm");
 
   // just for testing!
-  // const BathtubTokenTest = await ethers.getContractFactory("BathtubTokenTest");
-  // const BathTest = await BathtubTokenTest.deploy(deployer.address);
-  // console.log("BathTest address: ", BathTest.address);
+  const HarvestToken = await ethers.getContractFactory("HarvestToken");
+  const Harvest = await HarvestToken.deploy();
+  console.log("Harvest address: ", Harvest.address);
 
-  const BathTokenAddress = '0xe5b8C3381C0A2544883CfF9dDaf1e48D9dea9E49'
-  const startTime = 1685876400;  // Sun Jun 04 2023 11:00:00 GMT+0000
+  const HarvestTokenAddress = Harvest.address
+  const startTime = 1689069659;  // timestamp to start pools
   const runningTime = 3600 * 24 * 365 * 10;  //10 years - 315360000 sec
-  const BathPerSecond = "27600000000000000000"; // 27.6 Bath per sec
-
+  const HrvstPerSecond = "198412698400000000"; // 0.1984126984 HRVST per sec
   // Change this to real addresses
-  const feeCollector = '0xa075967369Cd5FB0353ef2d03F1CA14FCd2e3C0d'; // Treasury address
-  const mktgAddress = '0x4900ed49B287F2B4Db98aC4dB03BcfD2F30F1788'; // Marketing address
-  const devAddress = '0xf59ac041216d19eae6a9125ddb2ef0c3300ca9e0'; // Dev address
+  const feeCollector = '0x96b301fBC930F21a445234Ef49aC05e302cfF0c1'; // Treasury address
+  const presaleContract = '0xA610A93487234B8feD6fD3B3E5e0829eAeBB9543'
 
-  const Farm = await BathtubFarm.deploy(
-    BathTokenAddress, startTime, runningTime, BathPerSecond, feeCollector, mktgAddress, devAddress
+  const Farm = await HarvestFarm.deploy(
+    HarvestTokenAddress, startTime, runningTime, HrvstPerSecond, feeCollector, presaleContract
   );
 
   console.log("Farm address: ", Farm.address);

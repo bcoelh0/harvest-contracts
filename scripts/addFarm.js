@@ -5,70 +5,63 @@ async function main() {
 
   console.log("Deploying contracts with the account:", deployer.address);
 
-  const BathtubFarm = await ethers.getContractFactory("BathtubFarm");
-  const farm = await BathtubFarm.attach("0x88963edFeD456e6a964a2533277C0506f908da81");
+  const HarvestFarm = await ethers.getContractFactory("HarvestFarm");
+  const farm = await HarvestFarm.attach("0x7b388545fc0E2bC0214FfD3913B1FDCE0d39923d");
 
-  // // just for testing!
-  // const BathtubToken = await ethers.getContractFactory("BathtubToken");
-  // const Bath = await BathtubToken.deploy(deployer.address);
+  // const HarvestToken = await ethers.getContractFactory("HarvestToken");
+  // const hrvst = await HarvestToken.attach('0x8dB29Cf1Bdf5802Ba94db6822b9af8257ad0C59F');
 
-  // uint256 _allocPoint, --> total: 10_000, so 35% is 3500
-  // IERC20 _token,
-  // uint16 _depositFee,
-  // uint16 _withdrawFee,
-  // bool _withUpdate,
-  // uint256 _lastRewardTime
 
-  // Rameses BATH/USDC LP -- pool 0
-  let tx = await farm.add(
-    2500, // 25% allocation
-    '0x240cE8668BFBc8891A63D836730b724af7c36cdC', // use BATH/USDC LP address here
-    400, // 4% deposit fee
-    0, // 0% withdraw fee
-    true, // with update
-    0 // last reward time
-  );
-  console.log("Pool 0 added: ", tx.hash);
 
-  // Rameses ETH/USDC LP -- pool 1
+  // HRVST token
+  // let tx = await farm.add(
+  //   5000, // 50% allocation
+  //   '0x8dB29Cf1Bdf5802Ba94db6822b9af8257ad0C59F', // use HRVST address here
+  //   200, // 2% deposit fee
+  //   0, // 0% withdraw fee
+  //   true, // with update
+  //   0 // last reward time
+  // );
+  // console.log("Pool 0 added: ", tx.hash);
+
+  // WETH
   tx = await farm.add(
-    1500, // 15% allocation
-    '0x5513a48F3692Df1d9C793eeaB1349146B2140386', // use ETH/USDC LP address here
-    400, // 4% deposit fee
+    2500, // 25% allocation
+    '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
+    200, // 2% deposit fee
     0, // 0% withdraw fee
     true, // with update
     0 // last reward time
   );
   console.log("Pool 1 added: ", tx.hash);
 
-
-  // Rameses ETH/ARB LP -- pool 2
+  // ARB
   tx = await farm.add(
-    1500, // 15% allocation
-    '0x275f7112e3900fdf3c9532d749dd4985790e7933', // use ETH/ARB LP address here
-    400, // 4% deposit fee
+    1000, // 10% allocation
+    '0x912CE59144191C1204E64559FE8253a0e49E6548',
+    200, // 2% deposit fee
     0, // 0% withdraw fee
     true, // with update
     0 // last reward time
   );
   console.log("Pool 2 added: ", tx.hash);
 
-  // Rameses USDT/USDC LP -- pool 3
+  // USDC
   tx = await farm.add(
-    1000, // 15% allocation
-    '0xe25c248Ee2D3D5B428F1388659964446b4d78599', // use USDT/USDC LP address here
-    400, // 4% deposit fee
+    1000, // 10% allocation
+    '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
+    200, // 2% deposit fee
     0, // 0% withdraw fee
     true, // with update
     0 // last reward time
   );
   console.log("Pool 3 added: ", tx.hash);
 
-  // BATH/WETH LP -- pool 4
+  // PENDLE
   tx = await farm.add(
-    3500, // 35% allocation
-    '0x4f63b3A94700f972845e09F4292Bd1f392aCadD4', // use BATH/WETH LP address here
-    400, // 4% deposit fee
+    500, // 5% allocation
+    '0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8',
+    200, // 2% deposit fee
     0, // 0% withdraw fee
     true, // with update
     0 // last reward time
