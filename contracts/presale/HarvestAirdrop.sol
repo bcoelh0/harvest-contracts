@@ -14,15 +14,13 @@ contract HarvestAirdrop is Ownable {
   // X HRVST per ETH
   uint public airdropAmountPerEth = (totalAirdrop * 1 ether) / totalRaised;
 
+  bool public isOpen;
+
   mapping(address => bool) public alreadyClaimed;
 
   constructor(address _token, address _presale) {
     token = ERC20(_token);
     presale = HarvestPresale(_presale);
-  }
-
-  function isOpen() public view returns (bool) {
-    return token.balanceOf(address(this)) > 0;
   }
 
   function isEligible(address _address) public view returns (bool) {
@@ -39,7 +37,7 @@ contract HarvestAirdrop is Ownable {
   }
 
   function claim() public {
-    require(isOpen(), "Not open");
+    require(isOpen, "Not open");
     require(!alreadyClaimed[msg.sender], "Already claimed");
     require(isEligible(msg.sender), "Not eligible");
 
@@ -49,6 +47,10 @@ contract HarvestAirdrop is Ownable {
   }
 
   // admin
+
+  function toggleOpen() public onlyOwner {
+    isOpen = !isOpen;
+  }
 
   function setAirdropTreshold(uint _treshold) public onlyOwner {
     airdropTreshold = _treshold;
