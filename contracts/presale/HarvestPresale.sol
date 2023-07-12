@@ -47,12 +47,13 @@ contract HarvestPresale is Ownable {
     _;
   }
 
-  constructor(uint _privateRaiseOpenAt, address _wlDataAddress) {
+  constructor(uint _privateRaiseOpenAt, address _wlDataAddress, address _token) {
     privateRaiseOpenAt = _privateRaiseOpenAt;
     publicRaiseOpenAt = privateRaiseOpenAt + PRIVATE_RAISE_DURATION;
     raiseCloseAt = privateRaiseOpenAt + TOTAL_RAISE_DURATION;
 
     wlDataAddress = _wlDataAddress;
+    token = ERC20(_token);
   }
 
   function balanceOf(address _address) public view returns (uint) {
