@@ -13,7 +13,7 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      arbitrumOne: 'QPK7ZKPFEBIZZB89RUKNB842GZSGEYNW9J'
+      arbitrumOne: process.env.SCAN_API_KEY
     }
   },
   networks: {
