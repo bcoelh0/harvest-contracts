@@ -17,6 +17,8 @@ contract HarvestWhitelistData is Ownable {
   }
 
   function addWhitelistAccount(address _account) public onlyOwner {
+    if(accounts[_account]) { return; }
+
     accounts[_account] = true;
     wlDataLength++;
   }
@@ -29,6 +31,8 @@ contract HarvestWhitelistData is Ownable {
   }
 
   function removeWhitelistAccount(address _account) public onlyOwner {
+    if(!accounts[_account]) { return; }
+
     accounts[_account] = false;
     wlDataLength--;
   }

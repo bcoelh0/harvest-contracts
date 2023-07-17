@@ -13,12 +13,12 @@ async function main() {
   console.log("Harvest address: ", Harvest.address);
 
   const HarvestTokenAddress = Harvest.address
-  const startTime = 1689069659;  // timestamp to start pools
+  const startTime = 1689948000;  // timestamp to start pools
   const runningTime = 3600 * 24 * 365 * 10;  //10 years - 315360000 sec
   const HrvstPerSecond = "198412698400000000"; // 0.1984126984 HRVST per sec
   // Change this to real addresses
-  const feeCollector = '0x96b301fBC930F21a445234Ef49aC05e302cfF0c1'; // Treasury address
-  const presaleContract = '0xA610A93487234B8feD6fD3B3E5e0829eAeBB9543'
+  const feeCollector = '0xFD776F681Be9Aa0b7A6736705ADAbF7fa76cB84e'; // Treasury address
+  const presaleContract = ''
 
   const Farm = await HarvestFarm.deploy(
     HarvestTokenAddress, startTime, runningTime, HrvstPerSecond, feeCollector, presaleContract
