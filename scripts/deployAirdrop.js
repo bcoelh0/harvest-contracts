@@ -6,12 +6,12 @@ async function main() {
   console.log("Deploying contracts with the account:", deployer.address);
 
   let hrvstTokenAddress = '0x8dB29Cf1Bdf5802Ba94db6822b9af8257ad0C59F'
+  let hrvstPresaleAddress = '0xa7D4cfD62cf455DC83563025c7Fc033a59fD59CB'
 
-  const HarvestWhitelistData = await ethers.getContractFactory("HarvestWhitelistData");
-  const wlData = await HarvestWhitelistData.deploy()
-  const HarvestPresale = await ethers.getContractFactory("HarvestPresale");
-  const presale = await HarvestPresale.deploy(1689176108, wlData.address, hrvstTokenAddress);
-  console.log("Presale address:", presale.address);
+  const HarvestAirdrop = await ethers.getContractFactory("HarvestAirdrop")
+  const airdrop = await HarvestAirdrop.deploy(hrvstTokenAddress, hrvstPresaleAddress)
+
+  console.log("airdrop address:", airdrop.address);
 }
 
 main()

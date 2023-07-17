@@ -84,6 +84,14 @@ contract HarvestPresale is Ownable {
     return HarvestWhitelistData(wlDataAddress).isWhitelisted(_address);
   }
 
+  function claimableAmount(address _address) public view returns (uint) {
+    if (accounts[_address].tokenClaimedAt != 0) {
+      return 0;
+    }
+
+    return getTokenAmount(accounts[_address].balance);
+  }
+
   function getTokenAmount(uint _ethAmount) public view returns (uint) {
     // balance * 1 ether / tokenPrice
     return SafeMath.div(SafeMath.mul(_ethAmount, 1 ether), tokenPrice);

@@ -5,11 +5,12 @@ pragma solidity ^0.8.11;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./presale/HarvestPresale.sol";
 
 // Note that this pool has no minter key of token (rewards).
 // Instead, rewards will be sent to this pool at the beginning.
-contract HarvestFarm is Ownable {
+contract HarvestFarm is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     /// User-specific information.
@@ -257,7 +258,7 @@ contract HarvestFarm is Ownable {
 
     /// Update reward variables of the given pool to be up-to-date.
     /// @param _pid Id of the pool to be updated
-    function updatePool(uint256 _pid) public {
+    function updatePool(uint256 _pid) public nonReentrant {
         PoolInfo storage pool = poolInfo[_pid];
         if (block.timestamp <= pool.lastRewardTime) {
             return;
@@ -285,7 +286,7 @@ contract HarvestFarm is Ownable {
     /// Deposit tokens in a pool.
     /// @param _pid Id of the chosen pool
     /// @param _amount Amount of tokens to be staked in the pool
-    function deposit(uint256 _pid, uint256 _amount) public {
+    function deposit(uint256 _pid, uint256 _amount) public nonReentrant {
         address _sender = msg.sender;
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_sender];
@@ -317,7 +318,7 @@ contract HarvestFarm is Ownable {
     /// Withdraw tokens from a pool.
     /// @param _pid Id of the chosen pool
     /// @param _amount Amount of tokens to be withdrawn from the pool
-    function withdraw(uint256 _pid, uint256 _amount) public {
+    function withdraw(uint256 _pid, uint256 _amount) public nonReentrant {
         address _sender = msg.sender;
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_sender];
@@ -351,7 +352,7 @@ contract HarvestFarm is Ownable {
 
     /// Withdraw tokens from a pool without rewards. ONLY IN CASE OF EMERGENCY.
     /// @param _pid Id of the chosen pool
-    function emergencyWithdraw(uint256 _pid) public {
+    function emergencyWithdraw(uint256 _pid) public nonReentrant {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
         uint256 _amount = user.amount;

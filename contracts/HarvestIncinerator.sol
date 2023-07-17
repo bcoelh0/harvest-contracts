@@ -4,9 +4,10 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./HarvestToken.sol";
 
-contract HarvestIncinerator is Ownable, Pausable {
+contract HarvestIncinerator is Ownable, Pausable, ReentrancyGuard {
     HarvestToken public hrvstToken;
     uint256 public pricePerHrvst; // e.g: 1 HRVST = 0.0001 ETH
 
@@ -16,7 +17,7 @@ contract HarvestIncinerator is Ownable, Pausable {
         _pause();
     }
 
-    function paidBurn(uint _hrvstAmount) external whenNotPaused {
+    function paidBurn(uint _hrvstAmount) external whenNotPaused nonReentrant {
         require(_hrvstAmount > 0, "Amount must be greater than 0");
         require(_hrvstAmount <= hrvstToken.balanceOf(msg.sender), "Insuficient balance");
 
